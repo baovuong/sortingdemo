@@ -24,6 +24,7 @@ class Sorting
     public static function insertionSort(&$input)
     {
         $steps = array();
+        // array_push($steps, new Step($input));
         $n = count($input);
         for ($i=1; $i<$n; $i++) {
             $key = $input[$i];
@@ -36,6 +37,7 @@ class Sorting
             }
 
             $input[$j+1] = $key;
+            array_push($steps, new Step($input));
         }
         return $steps;
     }
@@ -63,5 +65,7 @@ function print_array($a)
 $numbers = range(1,20);
 shuffle($numbers);
 $steps = Sorting::insertionSort($numbers);
-var_export($steps);
+foreach ($steps as $step) {
+    print_array($step->value);
+}
 ?>
