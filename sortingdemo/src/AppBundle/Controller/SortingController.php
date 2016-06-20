@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use AppBundle\Utils\Sorting;
+use AppBundle\Utils\Step;
+
 class SortingController extends Controller
 {
     /**
@@ -17,25 +20,18 @@ class SortingController extends Controller
         $begin = microtime(true);
 
         $samples = $request->query->get('q');
-        $length = count($samples);
-        for ($i=0; $i < $length; $i++) {
-            $samples[$i] = (int)$samples[$i];
+        $keys = array_keys($samples);
+        foreach ($keys as $key) {
+            $samples[$key] = (int)$samples[$key];
         }
-
-
-        //$samples = array_map('SortingController::toInt', $samples);
+        $steps = Sorting::insertionSort($samples);
 
         $end = microtime(true);
         $data = array(
-            'samples' => $samples,
+            'steps' => Step::listOfSteps($steps),
             'elapsed' => $end - $begin
         );
 
         return new JsonResponse($data);
-    }
-
-    private static function toInt(&$stringValue)
-    {
-        $stringValie = (int)$stringValue;
     }
 }
