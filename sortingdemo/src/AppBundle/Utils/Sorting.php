@@ -9,7 +9,28 @@ class Sorting
 
     public static function selectionSort(&$input)
     {
-
+        $steps = array();
+        array_push($steps, new Step($input));
+        
+        $n = count($input);
+        for ($i = 0; $i < $n - 1; $i++) {
+            $minIdx = $i;
+            for ($j = $i+1; $j < $n; $j++) {
+                if ($input[$j] < $input[$minIdx]) {
+                    $minIdx = $j;
+                }
+                
+                $temp = $input[$minIdx];
+                $input[$minIdx] = $input[$i];
+                $input[$i] = $temp;
+                
+                array_push($steps, new Step($input));
+            }
+        }
+        
+        array_push($steps, new Step($input));
+        
+        return $steps;
     }
 
     public static function insertionSort(&$input)
