@@ -17,7 +17,7 @@ class SortingController extends Controller
     public function apiInsertionSortAction()
     {
         $request = Request::createFromGlobals();
-        return sortWithAlgorithm($request, array('Sorting', 'insertionSort'))
+        return sortWithAlgorithm($request, array('Utils\Sorting', 'insertionSort'))
     }
     
     public function apiSelectionSortAction()
@@ -33,7 +33,7 @@ class SortingController extends Controller
         foreach ($keys as $key) {
             $samples[$key] = (int)$samples[$key];
         }
-        $steps = $sortingAlgorithm($samples);
+        $steps = call_user_func_array($sortingAlgorithm, array($samples)); //$sortingAlgorithm($samples);
         $end = microtime(true);
         
         return new JsonResponse(array(
