@@ -17,14 +17,17 @@ class SortingController extends Controller
     public function apiInsertionSortAction()
     {
         $request = Request::createFromGlobals();
-        return sortWithAlgorithm($request, array('Utils\Sorting', 'insertionSort'))
+        return $this->sortWithAlgorithm($request, array('AppBundle\Utils\Sorting', 'insertionSort'));
     }
-    
+
+    /**
+     * @Route("/api/selection")
+     */
     public function apiSelectionSortAction()
     {
-        
+        return $this->sortWithAlgorithm(Request::createFromGlobals(), array('AppBundle\Utils\Sorting', 'selectionSort'));
     }
-    
+
     private function sortWithAlgorithm($request, $sortingAlgorithm)
     {
         $begin = microtime(true);
@@ -33,13 +36,13 @@ class SortingController extends Controller
         foreach ($keys as $key) {
             $samples[$key] = (int)$samples[$key];
         }
-        $steps = call_user_func_array($sortingAlgorithm, array($samples)); //$sortingAlgorithm($samples);
+        $steps = call_user_func_array($sortingAlgorithm, array(&$samples)); //$sortingAlgorithm($samples);
         $end = microtime(true);
-        
+
         return new JsonResponse(array(
            'steps' => Step::listOfSteps($steps),
             'elapsed' => $end - $begin
         ));
-        
+
     }
 }
