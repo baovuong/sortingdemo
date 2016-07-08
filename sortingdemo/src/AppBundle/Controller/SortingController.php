@@ -28,6 +28,14 @@ class SortingController extends Controller
         return $this->sortWithAlgorithm(Request::createFromGlobals(), array('AppBundle\Utils\Sorting', 'selectionSort'));
     }
 
+    /**
+     * @Route("/api/merge")
+     */
+    public function apiMergeSortAction()
+    {
+        return $this->sortWithAlgorithm(Request::createFromGlobals(), array('AppBundle\Utils\Sorting', 'mergeSort'));
+    }
+
     private function sortWithAlgorithm($request, $sortingAlgorithm)
     {
         $begin = microtime(true);
@@ -36,11 +44,12 @@ class SortingController extends Controller
         foreach ($keys as $key) {
             $samples[$key] = (int)$samples[$key];
         }
-        $steps = call_user_func_array($sortingAlgorithm, array(&$samples)); //$sortingAlgorithm($samples);
+        $frames = call_user_func_array($sortingAlgorithm, array(&$samples)); //$sortingAlgorithm($samples);
+        Sorting::cleanFrames($frames);
         $end = microtime(true);
 
         return new JsonResponse(array(
-           'steps' => Step::listOfSteps($steps),
+           'frames' => $frames,
             'elapsed' => $end - $begin
         ));
 
