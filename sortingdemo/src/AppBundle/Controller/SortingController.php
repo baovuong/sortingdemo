@@ -44,8 +44,8 @@ class SortingController extends Controller
         foreach ($keys as $key) {
             $samples[$key] = (int)$samples[$key];
         }
-        $frames = call_user_func_array($sortingAlgorithm, array(&$samples)); //$sortingAlgorithm($samples);
-        Sorting::cleanFrames($frames);
+        $frames = call_user_func_array($sortingAlgorithm, array(&$samples));
+        $frames['steps'] = Sorting::cleanFrames($frames);
         $end = microtime(true);
 
         return new JsonResponse(array(

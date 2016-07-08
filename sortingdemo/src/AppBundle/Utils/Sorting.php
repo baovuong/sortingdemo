@@ -19,17 +19,18 @@ class Sorting
         return $diff;
     }
 
-    public static function cleanFrames(&$frames)
+    public static function cleanFrames($frames)
     {
+        $cleanedUp = array();
         $n = count($frames['steps']);
         for ($i=0; $i<$n-1; $i++) {
             if (count($frames['steps'][$i]['changes']) == 0
                 && !(isset($frames['steps'][$i]['focused']) || array_key_exists('focused', $frames['steps'][$i]))) {
-                unset($frames['steps'][$i]);
-                $n--;
+            } else {
+                array_push($cleanedUp, $frames['steps'][$i]);
             }
         }
-        return $frames;
+        return $cleanedUp;
     }
 
     public static function selectionSort(&$input)
@@ -168,7 +169,7 @@ class Sorting
             $j++;
             $k++;
         }
-
+        //$frames['steps'] = $steps;
         //return $frames;
     }
 
